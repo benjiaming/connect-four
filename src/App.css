@@ -1,5 +1,40 @@
-.App {
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+
+.game {
   text-align: center;
+  font-family: "Roboto", sans-serif;
+  font-size: 30px;
+
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#a0d8ef+0,ddf1f9+65,feffff+100 */
+  background: rgb(160, 216, 239); /* Old browsers */
+  background: -moz-linear-gradient(
+    top,
+    rgba(160, 216, 239, 1) 0%,
+    rgba(221, 241, 249, 1) 65%,
+    rgba(254, 255, 255, 1) 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    top,
+    rgba(160, 216, 239, 1) 0%,
+    rgba(221, 241, 249, 1) 65%,
+    rgba(254, 255, 255, 1) 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    rgba(160, 216, 239, 1) 0%,
+    rgba(221, 241, 249, 1) 65%,
+    rgba(254, 255, 255, 1) 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a0d8ef', endColorstr='#feffff',GradientType=0 ); /* IE6-9 */
+}
+
+.header {
+  padding: 30px;
+  font-weight: bold;
+}
+.board-table {
+  display: inline-block;
+  margin-bottom: 30px;
 }
 
 .board-button {
@@ -8,15 +43,55 @@
   height: 60px;
   border-radius: 50%;
   border: 0;
-  margin: 1px;
+  margin: 5px;
   background: #bbb;
+  box-shadow: 5px 6px 8px -2px #0a0909;
+}
+.board-button:hover {
+  background: black;
+  border: 1px solid;
+  transition: background 250ms ease-in-out, transform 150ms ease;
 }
 .board-button:focus {
   outline: none;
-}
-.board-button:hover {
-  border: 5px solid;
+  transition: background-color 0.3s ease;
 }
 .game-over {
+  font-size: 20px;
   text-transform: uppercase;
+}
+.next-turn {
+  font-size: 20px;
+}
+
+.restart-button {
+  display: inline-block;
+  border: none;
+  padding: 1rem 2rem;
+  margin: 20px;
+  text-decoration: none;
+  background: #0069ed;
+  color: #ffffff;
+  font-family: sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 250ms ease-in-out, transform 150ms ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 5px;
+  box-shadow: 5px 6px 8px -2px #0a0909;
+}
+
+.restart-button:hover,
+button:focus {
+  background: #0053ba;
+}
+
+.restart-button:focus {
+  outline: 1px solid #fff;
+  outline-offset: -4px;
+}
+
+.restart-button:active {
+  transform: scale(0.99);
 }

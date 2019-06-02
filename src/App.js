@@ -1,123 +1,45 @@
 import React, { Component } from "react";
+import { Board } from "./Board";
+import GameLogic, { stateEnum } from "./GameLogic";
 import "./App.css";
 
+const Header = () => {
+  return <div className="header">Connect Four</div>;
+};
 const GameOver = ({ winner }) => {
+  const text = winner ? `${winner} wins!` : "Game over!";
+  return <div className="game-over">{text}</div>;
+};
+
+const NextTurn = ({ who }) => {
+  return <div className="next-turn">Next Player: {who}</div>;
+};
+const RestartGame = ({ onClick }) => {
   return (
-    <div className="game-over">
-      {winner} wins!
-      <div />
-    </div>
+    <button className="restart-button" onClick={onClick}>
+      Restart game
+    </button>
   );
 };
-
-const stateEnum = {
-  EMPTY: "#bbb",
-  RED: "red",
-  BLACK: "black"
-};
-
-class Piece extends Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-  handleClick() {
-    this.props.onClick(this.props.pos);
-  }
-  render() {
-    const { pos, color } = this.props;
-    const style = {
-      background: color
-    };
-    return (
-      <td key={pos}>
-        <button
-          style={style}
-          className="board-button"
-          onClick={this.handleClick}
-          data={pos}
-        />
-      </td>
-    );
-  }
-}
-class Board extends Component {
-  render() {
-    const buttons = this.props.pieces.map((row, i) => (
-      <tr key={i}>
-        {row.map((col, j) => (
-          <Piece
-            key={j}
-            pos={`${i}:${j}`}
-            onClick={this.props.onClick}
-            color={col}
-          />
-        ))}
-      </tr>
-    ));
-    return (
-      <table>
-        <tbody>{buttons}</tbody>
-      </table>
-    );
-  }
-}
 
 class Game extends Component {
   constructor(props) {
     super(props);
+    this.WINNING_NUM = 4;
     this.numRows = 6;
     this.numCols = 7;
-    this.WINNING_NUM = 4;
-    this.state = {
-      pieces: this.createPieces(this.numRows, this.numCols),
-      paused: false,
+    this.gameLogic = new GameLogic(this.numRows, this.WINNING_NUM);
+    this.state = this.initState();
+    this.onClick = this.onClick.bind(this);
+    this.restartGame = this.restartGame.bind(this);
+  }
+  initState() {
+    return {
+      pieces: this.gameLogic.createPieces(this.numRows, this.numCols),
       isBlacksTurn: true,
       isOver: false,
       winner: ""
     };
-    this.onClick = this.onClick.bind(this);
-  }
-  createPieces(rows, cols) {
-    return [...Array(rows)].map(() => [...Array(cols)].fill(stateEnum.EMPTY));
-  }
-
-  getCoords(pos) {
-    return pos.split(":").map(i => parseInt(i));
-  }
-  isEmpty(coords) {
-    return this.state.pieces[coords[0]][coords[1]] === stateEnum.EMPTY;
-  }
-  isRed(coords) {
-    return this.state.pieces[coords[0]][coords[1]] === stateEnum.RED;
-  }
-  isBlack(coords) {
-    return this.state.pieces[coords[0]][coords[1]] === stateEnum.BLACK;
-  }
-  findAvailablePos(coords) {
-    for (let row = this.numRows - 1; row >= 0; row--) {
-      const checkCoords = [row, coords[1]];
-      if (this.isEmpty(checkCoords)) return checkCoords;
-    }
-    return undefined;
-  }
-  checkHorizontal(pieces) {
-    const black = stateEnum.BLACK.repeat(this.WINNING_NUM);
-    const red = stateEnum.RED.repeat(this.WINNING_NUM);
-    const checkLine = (row, str) => row.join("").includes(str);
-    for (let row of pieces) {
-      if (checkLine(row, black)) return stateEnum.BLACK;
-      if (checkLine(row, red)) return stateEnum.RED;
-    }
-    return stateEnum.EMPTY;
-  }
-  checkVertical(pieces) {
-    const transposedMatrix = array =>
-      array[0].map((col, i) => array.map(row => row[i]));
-    return this.checkHorizontal(transposedMatrix(pieces));
-  }
-  checkDiagonal() {
-    return stateEnum.EMPTY;
   }
   setWinner(winner) {
     this.setState({ winner, isOver: true }, () => {});
@@ -129,32 +51,42 @@ class Game extends Component {
     }
     return false;
   }
-  hasFour() {
-    const horizontal = this.checkHorizontal(this.state.pieces);
+  checkFour() {
+    const horizontal = this.gameLogic.checkHorizontal(this.state.pieces);
     if (this.checkWinner(horizontal)) return;
-    const vertical = this.checkVertical(this.state.pieces);
+    const vertical = this.gameLogic.checkVertical(this.state.pieces);
     if (this.checkWinner(vertical)) return;
-    const diagonal = this.checkDiagonal();
+    const diagonal = this.gameLogic.checkDiagonal(this.state.pieces);
     if (this.checkWinner(diagonal)) return;
   }
   onClick(pos) {
+    console.log("onclick", this.state);
+    if (this.state.isOver) return;
     const color = this.state.isBlacksTurn ? stateEnum.BLACK : stateEnum.RED;
     const pieces = [...this.state.pieces];
-    const coords = this.getCoords(pos);
-    if (!this.isEmpty(coords)) return;
-    const avail = this.findAvailablePos(coords);
+    const coords = this.gameLogic.getCoords(pos);
+    if (!this.gameLogic.isEmpty(this.state.pieces, coords)) return;
+    const avail = this.gameLogic.findAvailablePos(this.state.pieces, coords);
     if (avail === undefined) return;
     pieces[avail[0]][avail[1]] = color;
-    this.hasFour();
+    this.checkFour();
     this.setState({ pieces, isBlacksTurn: !this.state.isBlacksTurn });
   }
+  restartGame() {
+    this.setState(this.initState());
+  }
   render() {
-    if (this.state.isOver) {
-      return <GameOver winner={this.state.winner} />;
-    }
+    const nextTurn = this.state.isBlacksTurn ? "BLACK" : "RED";
     return (
       <div className="game">
+        <Header />
         <Board pieces={this.state.pieces} onClick={this.onClick} />
+        {this.state.isOver ? (
+          <GameOver winner={this.state.winner} />
+        ) : (
+          <NextTurn who={nextTurn} />
+        )}
+        <RestartGame onClick={this.restartGame} />
       </div>
     );
   }
