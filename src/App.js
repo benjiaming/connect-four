@@ -51,13 +51,10 @@ class Game extends Component {
     }
     return false;
   }
-  checkFour() {
-    const horizontal = this.gameLogic.checkHorizontal(this.state.pieces);
-    if (this.checkWinner(horizontal)) return;
-    const vertical = this.gameLogic.checkVertical(this.state.pieces);
-    if (this.checkWinner(vertical)) return;
-    const diagonal = this.gameLogic.checkDiagonal(this.state.pieces);
-    if (this.checkWinner(diagonal)) return;
+  checkWinningNum() {
+    ["checkHorizontal", "checkVertical", "checkDiagonal"].forEach(fun => {
+      if (this.checkWinner(this.gameLogic[fun](this.state.pieces))) return;
+    });
   }
   onClick(coords) {
     if (this.state.isOver) return;
@@ -69,7 +66,7 @@ class Game extends Component {
     const avail = this.gameLogic.findAvailablePos(this.state.pieces, coords);
     if (avail === undefined) return;
     pieces[avail[0]][avail[1]] = color;
-    this.checkFour();
+    this.checkWinningNum();
     this.setState({ pieces, isBlacksTurn: !this.state.isBlacksTurn });
   }
   restartGame() {
