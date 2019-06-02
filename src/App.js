@@ -59,13 +59,13 @@ class Game extends Component {
     const diagonal = this.gameLogic.checkDiagonal(this.state.pieces);
     if (this.checkWinner(diagonal)) return;
   }
-  onClick(pos) {
-    console.log("onclick", this.state);
+  onClick(coords) {
     if (this.state.isOver) return;
+
     const color = this.state.isBlacksTurn ? stateEnum.BLACK : stateEnum.RED;
     const pieces = [...this.state.pieces];
-    const coords = this.gameLogic.getCoords(pos);
     if (!this.gameLogic.isEmpty(this.state.pieces, coords)) return;
+
     const avail = this.gameLogic.findAvailablePos(this.state.pieces, coords);
     if (avail === undefined) return;
     pieces[avail[0]][avail[1]] = color;

@@ -47,6 +47,7 @@
   background: #bbb;
   box-shadow: 5px 6px 8px -2px #0a0909;
 }
+
 .board-button:hover {
   background: black;
   border: 1px solid;
@@ -59,6 +60,7 @@
 .game-over {
   font-size: 20px;
   text-transform: uppercase;
+  font-weight: bold;
 }
 .next-turn {
   font-size: 20px;

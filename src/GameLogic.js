@@ -12,9 +12,6 @@ export default class GameLogic {
   createPieces(rows, cols) {
     return [...Array(rows)].map(() => [...Array(cols)].fill(stateEnum.EMPTY));
   }
-  getCoords(pos) {
-    return pos.split(":").map(i => parseInt(i));
-  }
   isEmpty(pieces, coords) {
     return pieces[coords[0]][coords[1]] === stateEnum.EMPTY;
   }

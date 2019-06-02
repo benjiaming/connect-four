@@ -46,4 +46,27 @@ it("should provide game logic", () => {
     ["black", "#bbb", "red"]
   ];
   expect(gameLogic.checkDiagonal(matrix)).toEqual(stateEnum.RED);
+
+  matrix = gameLogic.createPieces(6, 7);
+  expect(matrix).toEqual([
+    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
+    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
+    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
+    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
+    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
+    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"]
+  ]);
+  matrix[2][6] = stateEnum.BLACK;
+  matrix[3][5] = stateEnum.BLACK;
+  matrix[4][4] = stateEnum.BLACK;
+  matrix[5][3] = stateEnum.BLACK;
+  expect(matrix).toEqual([
+    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
+    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
+    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "black"],
+    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "black", "#bbb"],
+    ["#bbb", "#bbb", "#bbb", "#bbb", "black", "#bbb", "#bbb"],
+    ["#bbb", "#bbb", "#bbb", "black", "#bbb", "#bbb", "#bbb"]
+  ]);
+  expect(gameLogic.checkDiagonal(matrix)).toEqual(stateEnum.BLACK);
 });

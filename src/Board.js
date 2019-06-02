@@ -1,25 +1,17 @@
 import React, { Component } from "react";
 
 class Piece extends Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-  handleClick() {
-    this.props.onClick(this.props.pos);
-  }
   render() {
     const { pos, color } = this.props;
     const style = {
       background: color
     };
     return (
-      <td key={pos}>
+      <td>
         <button
           style={style}
           className="board-button"
-          onClick={this.handleClick}
-          data={pos}
+          onClick={() => this.props.onClick(pos)}
         />
       </td>
     );
@@ -32,7 +24,7 @@ export class Board extends Component {
         {row.map((col, j) => (
           <Piece
             key={j}
-            pos={`${i}:${j}`}
+            pos={[i, j]}
             onClick={this.props.onClick}
             color={col}
           />
