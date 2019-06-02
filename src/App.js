@@ -42,7 +42,7 @@ class Game extends Component {
     };
   }
   setWinner(winner) {
-    this.setState({ winner, isOver: true }, () => {});
+    this.setState({ winner, isOver: true });
   }
   checkWinner(result) {
     if (result !== stateEnum.EMPTY) {
@@ -61,9 +61,9 @@ class Game extends Component {
 
     const color = this.state.isBlacksTurn ? stateEnum.BLACK : stateEnum.RED;
     const pieces = [...this.state.pieces];
-    if (!this.gameLogic.isEmpty(this.state.pieces, coords)) return;
+    if (!this.gameLogic.isEmpty(pieces, coords)) return;
 
-    const avail = this.gameLogic.findAvailablePos(this.state.pieces, coords);
+    const avail = this.gameLogic.findAvailablePos(pieces, coords);
     if (avail === undefined) return;
     pieces[avail[0]][avail[1]] = color;
     this.checkWinningNum();
