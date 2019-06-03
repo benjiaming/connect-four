@@ -10,13 +10,9 @@ it("renders without crashing", () => {
 });
 
 it("should provide game logic", () => {
-  let gameLogic = new GameLogic(3, 3);
+  let gameLogic = new GameLogic({ winningNum: 3, numRows: 3 });
   let matrix = gameLogic.createPieces(3, 3);
-  expect(matrix).toEqual([
-    ["#bbb", "#bbb", "#bbb"],
-    ["#bbb", "#bbb", "#bbb"],
-    ["#bbb", "#bbb", "#bbb"]
-  ]);
+  expect(matrix).toEqual([[0, 0, 0], [0, 0, 0], [0, 0, 0]]);
   expect(
     gameLogic
       .range(2)
@@ -32,41 +28,36 @@ it("should provide game logic", () => {
   matrix[0] = [stateEnum.RED, stateEnum.RED, stateEnum.BLACK];
   expect(gameLogic.checkHorizontal(matrix)).toEqual(stateEnum.EMPTY);
 
-  matrix = [
-    ["red", "#bbb", "#bbb"],
-    ["red", "#bbb", "#bbb"],
-    ["red", "#bbb", "#bbb"]
-  ];
+  matrix = [[2, 0, 0], [2, 0, 0], [2, 0, 0]];
   expect(gameLogic.checkVertical(matrix)).toEqual(stateEnum.RED);
-  matrix[0][0] = "black";
+  matrix[0][0] = 1;
   expect(gameLogic.checkVertical(matrix)).toEqual(stateEnum.EMPTY);
-  matrix = [
-    ["red", "#bbb", "#bbb"],
-    ["black", "red", "#bbb"],
-    ["black", "#bbb", "red"]
-  ];
+  matrix = [[2, 0, 0], [1, 2, 0], [1, 0, 2]];
   expect(gameLogic.checkDiagonal(matrix)).toEqual(stateEnum.RED);
+});
 
-  matrix = gameLogic.createPieces(6, 7);
+it("should check diagonals", () => {
+  const gameLogic = new GameLogic({ winningNum: 4, numRows: 6 });
+  const matrix = gameLogic.createPieces(6, 7);
   expect(matrix).toEqual([
-    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
-    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
-    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
-    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
-    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
-    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"]
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0]
   ]);
   matrix[2][6] = stateEnum.BLACK;
   matrix[3][5] = stateEnum.BLACK;
   matrix[4][4] = stateEnum.BLACK;
   matrix[5][3] = stateEnum.BLACK;
   expect(matrix).toEqual([
-    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
-    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb"],
-    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "black"],
-    ["#bbb", "#bbb", "#bbb", "#bbb", "#bbb", "black", "#bbb"],
-    ["#bbb", "#bbb", "#bbb", "#bbb", "black", "#bbb", "#bbb"],
-    ["#bbb", "#bbb", "#bbb", "black", "#bbb", "#bbb", "#bbb"]
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0]
   ]);
   expect(gameLogic.checkDiagonal(matrix)).toEqual(stateEnum.BLACK);
 });

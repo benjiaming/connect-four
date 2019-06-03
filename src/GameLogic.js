@@ -1,13 +1,14 @@
 export const stateEnum = {
-  EMPTY: "#bbb",
-  RED: "red",
-  BLACK: "black"
+  EMPTY: 0,
+  BLACK: 1,
+  RED: 2
 };
+export const colorMap = ["#ccc", "black", "red"];
 
 export default class GameLogic {
-  constructor(numRows, winningNum) {
-    this.numRows = numRows;
-    this.WINNING_NUM = winningNum;
+  constructor(args) {
+    this.numRows = args.numRows;
+    this.winningNum = args.winningNum;
   }
   createPieces(rows, cols) {
     return [...Array(rows)].map(() => [...Array(cols)].fill(stateEnum.EMPTY));
@@ -24,8 +25,8 @@ export default class GameLogic {
   }
   checkHorizontal(pieces) {
     const checkLine = (row, str) => row.join("").includes(str);
-    const black = stateEnum.BLACK.repeat(this.WINNING_NUM);
-    const red = stateEnum.RED.repeat(this.WINNING_NUM);
+    const black = String(stateEnum.BLACK).repeat(this.winningNum);
+    const red = String(stateEnum.RED).repeat(this.winningNum);
     for (let row of pieces) {
       if (checkLine(row, black)) return stateEnum.BLACK;
       if (checkLine(row, red)) return stateEnum.RED;

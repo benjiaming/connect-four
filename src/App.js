@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Board } from "./Board";
-import GameLogic, { stateEnum } from "./GameLogic";
+import GameLogic, { stateEnum, colorMap } from "./GameLogic";
 import "./App.css";
 
 const Header = () => {
@@ -25,10 +25,13 @@ const RestartGame = ({ onClick }) => {
 class Game extends Component {
   constructor(props) {
     super(props);
-    this.WINNING_NUM = 4;
+    this.winningNum = 4;
     this.numRows = 6;
     this.numCols = 7;
-    this.gameLogic = new GameLogic(this.numRows, this.WINNING_NUM);
+    this.gameLogic = new GameLogic({
+      numRows: this.numRows,
+      winningNum: this.winningNum
+    });
     this.state = this.initState();
     this.onClick = this.onClick.bind(this);
     this.restartGame = this.restartGame.bind(this);
@@ -79,7 +82,7 @@ class Game extends Component {
         <Header />
         <Board pieces={this.state.pieces} onClick={this.onClick} />
         {this.state.isOver ? (
-          <GameOver winner={this.state.winner} />
+          <GameOver winner={colorMap[this.state.winner]} />
         ) : (
           <NextTurn who={nextTurn} />
         )}

@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import { colorMap } from "./GameLogic";
 
 class Piece extends Component {
   render() {
     const { pos, color } = this.props;
     const style = {
-      background: color
+      background: colorMap[color],
+      transition: "background 250ms ease-in-out, transform 150ms ease"
     };
     return (
       <td>
