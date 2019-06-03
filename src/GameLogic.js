@@ -35,7 +35,7 @@ export default class GameLogic {
   }
   checkVertical(pieces) {
     const transposedMatrix = array =>
-      array[0].map((col, i) => array.map(row => row[i]));
+      array[0].map((_, i) => array.map(row => row[i]));
     return this.checkHorizontal(transposedMatrix(pieces));
   }
   range(num) {
